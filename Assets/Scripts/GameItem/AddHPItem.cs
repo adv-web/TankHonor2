@@ -19,6 +19,7 @@ public class AddHPItem : MonoBehaviour {
 	}
 
 	[UsedImplicitly]
+	[PunRPC]
 	private void DestroySelf() {
 		if (!PhotonNetwork.isMasterClient) return;
 		PhotonNetwork.Destroy(gameObject);
