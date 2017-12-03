@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 //using Photon;
@@ -31,6 +32,12 @@ public class TankMove : UnityEngine.MonoBehaviour
     //PlayerHealth playerHealth;
 
     float defaultAndroidDPI = 320.0f;
+
+    public bool IsTurnOver {
+        get {
+            return Vector3.Angle(transform.up, Vector3.up) > 90;
+        }
+    }
 
     //初始化，获取组件，并计算相关值
     void Start()
@@ -67,6 +74,10 @@ public class TankMove : UnityEngine.MonoBehaviour
         CheckGround();              //判断玩家是否位于地面
         if (isGrounded == false)
             anim.SetBool("isJump", false);*/
+
+        if (IsTurnOver) {
+            Debug.Log("turn over");
+        }
         
         MoveHandler();
     }
