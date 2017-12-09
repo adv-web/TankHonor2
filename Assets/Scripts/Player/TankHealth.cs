@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using JetBrains.Annotations;
 using Photon;
 
 public class TankHealth : PunBehaviour
@@ -127,6 +128,7 @@ public class TankHealth : PunBehaviour
 
     //RPC函数，增加玩家血量
     [PunRPC]
+    [UsedImplicitly]
     public void AddHP(int value)
     {
         if (!PhotonNetwork.isMasterClient)      //加血函数只能由MasterClient调用
@@ -141,9 +143,31 @@ public class TankHealth : PunBehaviour
         photonView.RPC("UpdateHP", PhotonTargets.All, currentHP);   //使用RPC，更新所有客户端，该玩家对象的血量
     }
 
+    public void KillSelf() {
+        if (photonView.isMine) {
+            // 只有自己才能调用，因为自己知道自己的阵营
+            var score = (int) PhotonNetwork.player.customProperties["Score"];
+            var selfTeam = PhotonNetwork.player.customProperties["Team"].ToString();
+            photonView.RPC("AddTeamScore", PhotonTargets.MasterClient, selfTeam != "AttackerTeam", score);
+        }
+        photonView.RPC("UpdateHP", PhotonTargets.All, 0);
+    }
+
+    /// <summary>
+    /// 因玩家自杀，增加对方队伍的分数。只有 Master 调用
+    /// </summary>
+    /// <param name="isAttackTeam">是进攻队加分吗</param>
+    /// <param name="score">获得的分数</param>
+    [PunRPC]
+    [UsedImplicitly]
+    private void AddTeamScore(bool isAttackTeam, int score) {
+        if (!PhotonNetwork.isMasterClient) return;
+        GameManager.gm.AddTeamScore(score, isAttackTeam);
+    }
 
     //RPC函数，更新玩家血量
     [PunRPC]
+    [UsedImplicitly]
     void UpdateHP(int newHP)
     {
         if (photonView.isMine && currentHP > newHP)

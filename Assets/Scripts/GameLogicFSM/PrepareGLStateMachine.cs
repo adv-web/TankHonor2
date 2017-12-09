@@ -31,6 +31,7 @@ public class PrepareGLStateMachine : BaseGLStateMachine
     public override void Exit()
     {
         GMInstance.InstantiatePlayer(); //准备结束时初始化玩家实例
+        GMInstance.InstantiateGameItem();
     }
     //每帧更新
     public override void Update()

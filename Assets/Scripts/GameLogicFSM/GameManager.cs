@@ -114,6 +114,12 @@ public class GameManager : PunBehaviour
         UIController.initPlayerHpLabel(tankHealth.maxHP, 0);
         UIController.updatePlayerHPLabel(tankHealth.currentHP);
     }
+
+    public void InstantiateGameItem() {
+        if (!PhotonNetwork.isMasterClient) return;
+        PhotonNetwork.Instantiate("GameItem/AddHPItem", new Vector3(50.4f, 26.88f, 75.4f), Quaternion.identity, 0);
+    }
+    
     //状态机发生变化时调用
     [PunRPC]
     void stateMachineChange()
@@ -305,6 +311,17 @@ public class GameManager : PunBehaviour
         }
         photonView.RPC("UpdateScores", PhotonTargets.All, currentScoreOfAttackerTeam, currentScoreOfDefenderTeam);
     }
+
+    // master client invoke only
+    public void AddTeamScore(int score, bool isAttackTeam) {
+        if (isAttackTeam) {
+            currentScoreOfAttackerTeam += score;
+        } else {
+            currentScoreOfDefenderTeam += score;
+        }
+        photonView.RPC("UpdateScores", PhotonTargets.All, currentScoreOfAttackerTeam, currentScoreOfDefenderTeam);
+    }
+    
     //更细分数
     [PunRPC]
     void UpdateScores(int attackerTeamScore, int defenderTeamScore)

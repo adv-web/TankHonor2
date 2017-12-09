@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Photon;
 using UnityStandardAssets.CrossPlatformInput;
 using PlayFab;
@@ -251,6 +252,7 @@ public class TankShoot : PunBehaviour
         photonView.RPC("ShootEffect", PhotonTargets.AllViaServer, bulletEffectPosition, hitTag);//使用RPC，调用所有玩家对象的ShootEffect函数，显示射击效果
     }*/
     [PunRPC]
+    [UsedImplicitly]
     void Shoot(PhotonPlayer attacker, Vector3 origin, Vector3 gunEnd)
     {
         if (!PhotonNetwork.isMasterClient)      //如果玩家不是MasterClient，结束函数的执行

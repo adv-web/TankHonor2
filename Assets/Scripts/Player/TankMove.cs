@@ -35,7 +35,7 @@ public class TankMove : UnityEngine.MonoBehaviour
 
     public bool IsTurnOver {
         get {
-            return Vector3.Angle(transform.up, Vector3.up) > 90;
+            return Vector3.Angle(transform.up, Vector3.up) > 75;
         }
     }
 
@@ -66,6 +66,8 @@ public class TankMove : UnityEngine.MonoBehaviour
 #endif
     }
 
+    //private const float TOLERANCE = 0.001f; 
+    private float turnOverLastTime = 0;
     //每隔固定时间执行一次，用于物理模拟
     void FixedUpdate()
     {
@@ -77,6 +79,19 @@ public class TankMove : UnityEngine.MonoBehaviour
 
         if (IsTurnOver) {
             Debug.Log("turn over");
+            /*if (startTurnOverTime < 0) {
+                // 刚翻车，记录翻车的时间点
+                startTurnOverTime = DateTime.Now.Second;
+            } else */
+            turnOverLastTime += Time.deltaTime;
+            if (turnOverLastTime >= 10) {
+                // 翻了 10s ，判定死亡
+                Debug.Log("death by turn over 10s");
+                GetComponent<TankHealth>().KillSelf();
+                gameObject.SetActive(false);
+            }
+        } else {
+            turnOverLastTime = 0;
         }
         
         MoveHandler();
