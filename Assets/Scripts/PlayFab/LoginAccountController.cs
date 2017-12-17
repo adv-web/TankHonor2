@@ -7,7 +7,6 @@ using PlayFab.ClientModels;
 //玩家账号登录控制器
 public class LoginAccountController: MonoBehaviour {
 
-	public GameObject loginMainPanel;       //主登录面板
 	public GameObject loginAccountPanel;    //账号登录面板
 	public GameObject registerPanel;        //注册面板
 	public InputField account;              //玩家账号/邮箱输入栏
@@ -117,11 +116,5 @@ public class LoginAccountController: MonoBehaviour {
 	public void ClickRegisterButton(){
 		loginAccountPanel.SetActive (false);
 		registerPanel.SetActive (true);
-	}
-
-    //“取消”按钮的响应函数
-	public void ClickCancelButton(){
-		loginAccountPanel.SetActive (false);
-		loginMainPanel.SetActive (true);
 	}
 }
