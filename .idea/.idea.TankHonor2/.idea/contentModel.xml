@@ -382,6 +382,9 @@
           <e p="BulletController.cs" t="Include" />
           <e p="CameraRotate2.cs" t="Include" />
           <e p="CarController.cs" t="Include" />
+          <e p="Chat" t="Include">
+            <e p="Chat.cs" t="Include" />
+          </e>
           <e p="CreateRoomController.cs" t="Include" />
           <e p="FPSPlayerMove.cs" t="Include" />
           <e p="GameItem" t="Include">
