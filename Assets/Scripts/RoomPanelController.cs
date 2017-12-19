@@ -9,31 +9,31 @@ public class RoomPanelController : PunBehaviour {
 	public GameObject lobbyPanel;		//游戏大厅面板
 	public GameObject roomPanel;		//游戏房间面板
 	public Button backButton;			//返回按钮
-    public Text currentPanel; 
-    public Text roomName;				//房间名称文本
+	public Text currentPanel; 
+	public Text roomName;				//房间名称文本
 	public GameObject[] AttackerTeam;	//队伍1面板（显示队伍1信息）
 	public GameObject[] DefenderTeam;	//队伍2面板（显示队伍2信息）
 	public Button readyButton;			//准备/开始游戏按钮
 	public Text promptMessage;			//提示信息
 
-    public GameObject LoadingPanel;     //加载游戏提示
-    public Image mapImage;              //地图缩略图
+	public GameObject LoadingPanel;     //加载游戏提示
+	public Image mapImage;              //地图缩略图
 	public GameObject mapButtons;       //更换地图的按钮
 
-    string mapName;
-    int mapIndex;
-    List<string> mapKeys;
+	string mapName;
+	int mapIndex;
+	List<string> mapKeys;
 
 	PhotonView pView;
 	int teamSize;
 	Text[] texts;
-    ExitGames.Client.Photon.Hashtable customProperties;
-    ExitGames.Client.Photon.Hashtable customRoomProperties;
+	ExitGames.Client.Photon.Hashtable customProperties;
+	ExitGames.Client.Photon.Hashtable customRoomProperties;
 
-    void OnEnable () {
-        currentPanel.text = "房间";
+	void OnEnable () {
+		currentPanel.text = "房间";
 		pView = GetComponent<PhotonView>();                 //获取PhotonView组件
-        if (!PhotonNetwork.connected) return;
+		if (!PhotonNetwork.connected) return;
 		roomName.text = PhotonNetwork.room.name;	        //显示房间名称
 		promptMessage.text = "";							//提示信息
 
@@ -61,7 +61,7 @@ public class RoomPanelController : PunBehaviour {
 					{ "TeamNum",i },		//玩家队伍序号
 					{ "isReady",false },	//玩家准备状态
 					{ "Score",0 },			//玩家得分
-                    { "Death",0 }			//玩家死亡
+					{ "Death",0 }			//玩家死亡
 				};
 				PhotonNetwork.player.SetCustomProperties (customProperties);	//将玩家自定义属性赋予玩家
 				break;
@@ -75,7 +75,7 @@ public class RoomPanelController : PunBehaviour {
 					{ "TeamNum",i },		//玩家队伍序号
 					{ "isReady",false },	//玩家准备状态
 					{ "Score",0 },			//玩家得分
-                    { "Death",0 }			//玩家死亡
+					{ "Death",0 }			//玩家死亡
 				};
 				PhotonNetwork.player.SetCustomProperties (customProperties);	//将玩家自定义属性赋予玩家
 				break;
@@ -84,19 +84,19 @@ public class RoomPanelController : PunBehaviour {
 		ReadyButtonControl ();	//设置ReadyButton的按钮事件
 		MapButtonsControl();
 
-        //显示游戏房间的地图
-        mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
-        photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
-        mapKeys = new List<string>(GameInfo.maps.Keys);
-        int length = mapKeys.Count;
-        for(int i = 0; i < length; i++)
-        {
-            if(mapKeys[i] == mapName)
-            {
-                mapIndex = i;
-                break;
-            }
-        }
+		//显示游戏房间的地图
+		mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+		mapKeys = new List<string>(GameInfo.maps.Keys);
+		int length = mapKeys.Count;
+		for(int i = 0; i < length; i++)
+		{
+			if(mapKeys[i] == mapName)
+			{
+				mapIndex = i;
+				break;
+			}
+		}
 	}
 
 	/**覆写IPunCallback回调函数，当玩家属性更改时调用
@@ -254,45 +254,45 @@ public class RoomPanelController : PunBehaviour {
 	//RPC函数，玩家加载场景
 	[PunRPC]
 	public void LoadGameScene(string sceneName){
-        LoadingPanel.SetActive(true);
+		LoadingPanel.SetActive(true);
 		PhotonNetwork.LoadLevel ("Normandie");	//加载场景名为sceneName的场景
 	}
 
-    
+
 	//RPC函数，更新游戏房间地图的显示
 	[PunRPC]
 	public void UpdateMap(string name){
-        mapImage.sprite = GameInfo.maps[name];
-    }
+		mapImage.sprite = GameInfo.maps[name];
+	}
 
-    //显示或关闭地图切换按钮
+	//显示或关闭地图切换按钮
 	void MapButtonsControl(){
-        //只有房主可以切换地图
+		//只有房主可以切换地图
 		if (PhotonNetwork.isMasterClient)
 			mapButtons.SetActive (true);
 		else
 			mapButtons.SetActive (false);
 	}
-    //上一张地图
-    public void ClickMapLeftButton()
-    {
-        int length = mapKeys.Count;
-        mapIndex--;
-        if (mapIndex < 0) mapIndex = length - 1;
-        mapName = mapKeys[mapIndex];
-        customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
-        PhotonNetwork.room.SetCustomProperties(customProperties);
-        photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
-    }
-    //下一张地图
-    public void ClickMapRightButton()
-    {
-        int length = mapKeys.Count;
-        mapIndex++;
-        if (mapIndex >= length) mapIndex = 0;
-        mapName = mapKeys[mapIndex];
-        customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
-        PhotonNetwork.room.SetCustomProperties(customRoomProperties);
-        photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
-    }
+	//上一张地图
+	public void ClickMapLeftButton()
+	{
+		int length = mapKeys.Count;
+		mapIndex--;
+		if (mapIndex < 0) mapIndex = length - 1;
+		mapName = mapKeys[mapIndex];
+		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
+		PhotonNetwork.room.SetCustomProperties(customProperties);
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+	}
+	//下一张地图
+	public void ClickMapRightButton()
+	{
+		int length = mapKeys.Count;
+		mapIndex++;
+		if (mapIndex >= length) mapIndex = 0;
+		mapName = mapKeys[mapIndex];
+		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
+		PhotonNetwork.room.SetCustomProperties(customRoomProperties);
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+	}
 }
