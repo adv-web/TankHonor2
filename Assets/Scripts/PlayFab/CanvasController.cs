@@ -18,8 +18,8 @@ public class CanvasController : PunBehaviour {
 		PlayFabSettings.TitleId = PlayFabUserData.titleId;
         //设置游戏客户端连接的Photon服务器IP
 		if (PlayerPrefs.GetString ("PhotonServerIP") == "" || PlayerPrefs.GetString ("PhotonServerIP") == null) {
-			PlayerPrefs.SetString ("PhotonServerIP", "139.196.20.246");
-			PhotonNetwork.PhotonServerSettings.ServerAddress = "139.196.20.246";
+			PlayerPrefs.SetString ("PhotonServerIP", "202.120.79.101");
+			PhotonNetwork.PhotonServerSettings.ServerAddress = "202.120.79.101";  // same as the above
 		}
 	}
 

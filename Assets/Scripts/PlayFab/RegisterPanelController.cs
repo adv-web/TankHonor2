@@ -10,7 +10,7 @@ public class RegisterPanelController : MonoBehaviour {
 	public GameObject loginAccountPanel;    //账号登录面板（注册面板上一级）
 	public GameObject registerPanel;        //账号注册面板
 	public InputField username;             //玩家账号输入栏
-    public InputField email;                //绑定邮箱输入栏
+    //public InputField email;                //绑定邮箱输入栏
     public InputField password;             //登录密码输入栏
 	public InputField confirmPassword;      //确认密码输入栏
 	public Text errorMessage;               //错误信息提示
@@ -23,21 +23,24 @@ public class RegisterPanelController : MonoBehaviour {
 	void OnEnable () {
         //初始化输入框等信息
 		username.text = "";         
-        email.text = "";
+        //email.text = "";
 		password.text = "";
 		confirmPassword.text = "";
 		errorMessage.text = "";
         loginingWindow.SetActive(false);
-	}
+        PlayFabSettings.TitleId = "8AF6";
+    }
 
     //“注册”按钮的响应函数
 	public void ClickRegisterButton(){
         //在发送注册请求前，进行简单的非法输入检测
         if(username.text == ""){
             errorMessage.text = "请输入游戏账号";
-        }else if(email.text == ""){
+        }
+        /*else if(email.text == ""){
             errorMessage.text = "请输入绑定邮箱";
-        }else if (password.text == ""){
+        }*/
+        else if (password.text == ""){
             errorMessage.text = "请输入登录密码";
         }else if (password.text != confirmPassword.text) {
 			errorMessage.text = "登录密码与确认密码不一致";
@@ -46,9 +49,9 @@ public class RegisterPanelController : MonoBehaviour {
             //向PlayFab发起账号注册请求
             RegisterPlayFabUserRequest request = new RegisterPlayFabUserRequest(){
                 Username = username.text,
-                Email = email.text,
+                //Email = email.text,
 				Password = password.text,
-				RequireBothUsernameAndEmail = true  //注册信息需要包含注册账号的账号名和绑定邮箱
+				RequireBothUsernameAndEmail = false  //不用绑定邮箱
 			};
 			PlayFabClientAPI.RegisterPlayFabUser 
 			(
@@ -72,7 +75,7 @@ public class RegisterPanelController : MonoBehaviour {
 		PhotonNetwork.ConnectUsingSettings ("1.0");
 		PhotonNetwork.player.name = result.Username;
 
-        /*  学生作业 2-3：玩家创建账号成功时，为玩家添加默认枪支：AK47
+        /*  学生作业 2-3：玩家创建账号成功时，为玩家添加默认坦克 TODO
          *  作业提示：
          *  先使用PurchaseItemRequest声明一个道具购买请求，再使用PlayFabClientAPI.PurchaseItem发起道具购买请求
          *  道具购买成功，禁用游戏登录面板，启用游戏主面板（OnPurchaseItemRequest函数）
@@ -83,7 +86,7 @@ public class RegisterPanelController : MonoBehaviour {
 			CatalogVersion = PlayFabUserData.catalogVersion,
 			VirtualCurrency = "FR",
 			Price = 0,
-			ItemId = "AK47"
+			ItemId = "M4A3E2"
 		};
 		PlayFabClientAPI.PurchaseItem(request, OnPurchaseItemResult, OnPlayFabError);
 		/*
@@ -125,6 +128,6 @@ public class RegisterPanelController : MonoBehaviour {
    //取消按钮的事件响应函数
    public void ClickCancelButton(){
        registerPanel.SetActive (false);
-       loginAccountPanel.SetActive (true);
+       loginAccountPanel.SetActive (true); //回到登录界面
    }
 }

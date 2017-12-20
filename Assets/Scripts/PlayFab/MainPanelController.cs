@@ -183,7 +183,7 @@ public class MainPanelController : PunBehaviour {
 		//如果玩家未拥有装备的道具（超出使用期限）
 		if (!hasEquipedWeapon)
 		{
-			PlayFabUserData.equipedWeapon = "AK47";
+			PlayFabUserData.equipedWeapon = "M4A3E2";
 
 			//更新玩家属性Player Data“EquipedWeapon”
 			UpdateUserDataRequest request = new UpdateUserDataRequest();

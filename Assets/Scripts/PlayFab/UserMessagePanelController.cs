@@ -31,7 +31,7 @@ public class UserMessagePanelController : MonoBehaviour {
 
         //根据玩家当前等级，显示军衔和勋章
 		level.text = GameInfo.levelRankNames[PlayFabUserData.lv - 1];
-		rank.text = "10";
+		rank.text = "10";  //TODO
         if (PlayFabUserData.lv < GameInfo.levelExps.Length)
         {
             expText.text = PlayFabUserData.exp.ToString() + "/" + GameInfo.levelExps[PlayFabUserData.lv - 1].ToString();
@@ -55,9 +55,9 @@ public class UserMessagePanelController : MonoBehaviour {
 		PurchaseItemRequest request = new PurchaseItemRequest()
 		{
 			CatalogVersion = PlayFabUserData.catalogVersion,
-			VirtualCurrency = "FR",
+			VirtualCurrency = "CNY",
 			Price = 0,
-			ItemId = "AK47"
+			ItemId = "NaiveTank0"
 		};
 		/*
 		*loginPanel.SetActive(false);                //禁用游戏登录面板
