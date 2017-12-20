@@ -63,25 +63,33 @@ public class EndGLStateMachine : BaseGLStateMachine
     //添加经验值
     void AddUserExp(int resultWeight)
     {
+        /*
         var playerCustomProperties = PhotonNetwork.player.customProperties;
         int expAmount = 20 + 50 * resultWeight + 10 * (int)playerCustomProperties["Score"] - 1 * (int)playerCustomProperties["Death"];
         Dictionary<string, string> skillData = PlayFabSimpleJson.DeserializeObject<Dictionary<string, string>>(GameInfo.titleData["ExpAndMoneySkill"]);
         expAmount = (int)((float)expAmount * (1.0f + float.Parse(skillData["Level" + PlayFabUserData.expAndMoneySkillLV.ToString()]) / 100));
+        */    
+        int expAmount = 1000;
         GMInstance.UIController.showExpReward(expAmount);
         PlayFabUserData.exp += expAmount;
+        /*
         if (PlayFabUserData.exp >= GameInfo.levelExps[PlayFabUserData.lv] && GameInfo.levelExps[PlayFabUserData.lv] != -1)
         {
             PlayFabUserData.exp -= GameInfo.levelExps[PlayFabUserData.lv];
             PlayFabUserData.lv++;
-        }
+        } */
+        PlayFabUserData.lv++;
     }
     //添加金币
     void AddUserCurrency(int resultWeight)
     {
+        /*
         var playerCustomProperties = PhotonNetwork.player.customProperties;
         int currencyAmount = 20 + 200 * resultWeight + 10 * (int)playerCustomProperties["Score"] - 1 * (int)playerCustomProperties["Death"];
         Dictionary<string, string> skillData = PlayFabSimpleJson.DeserializeObject<Dictionary<string, string>>(GameInfo.titleData["ExpAndMoneySkill"]);
         currencyAmount = (int)((float)currencyAmount * (1.0f + float.Parse(skillData["Level" + PlayFabUserData.expAndMoneySkillLV.ToString()]) / 100));
+        */
+        int currencyAmount = 1000;
         GMInstance.UIController.showCurrencyReward(currencyAmount);
         AddUserVirtualCurrencyRequest request = new AddUserVirtualCurrencyRequest()
         {

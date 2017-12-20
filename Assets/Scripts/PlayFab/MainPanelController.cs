@@ -14,12 +14,12 @@ public class MainPanelController : PunBehaviour {
 	public GameObject lobbyPanel;           //游戏大厅面板
 	public GameObject shopPanel;            //游戏商城面板
 	public GameObject inventoryPanel;       //玩家仓库面板
-	public GameObject talentPanel;          //天赋系统面板
+	//public GameObject talentPanel;          //天赋系统面板
 	public GameObject leaderboardPanel;     //玩家排行榜面板
-	public GameObject achievementPanel;     //成就系统面板
+	//public GameObject achievementPanel;     //成就系统面板
 	public GameObject roomPanel;            //游戏房间面板
 	public GameObject userMessagePanel;     //玩家信息面板
-	public GameObject paymentPanel;         //货币兑换面板
+	//public GameObject paymentPanel;         //货币兑换面板
 
 	public GameObject dataLoadingWindow;    //“数据加载中”提示窗口
 	public GameObject userMessage;          //玩家简要信息
@@ -28,7 +28,7 @@ public class MainPanelController : PunBehaviour {
 	public GameObject panelMessage;         //当前显示面板的信息提示
 	public GameObject currency;             //玩家游戏货币面板
 	public Text goldCurrencyCount;          //玩家金币数量文本
-	public Text diamondCurrencyCount;       //玩家钻石数量文本
+	//public Text diamondCurrencyCount;       //玩家钻石数量文本
 	public GameObject pageSwitchButton;     //页面切换按钮集合
 
 	int requestNum = 4;
@@ -52,18 +52,18 @@ public class MainPanelController : PunBehaviour {
 			shopPanel.SetActive (false);
 		if (inventoryPanel != null)
 			inventoryPanel.SetActive (false);
-		if (talentPanel != null)
-			talentPanel.SetActive(false);
+		//if (talentPanel != null)
+			//talentPanel.SetActive(false);
 		if (leaderboardPanel != null)
 			leaderboardPanel.SetActive(false);
-		if (achievementPanel != null)
-			achievementPanel.SetActive(false);
+		//if (achievementPanel != null)
+			//achievementPanel.SetActive(false);
 		if (roomPanel != null)
 			roomPanel.SetActive(false);
 		if (userMessagePanel != null)
 			userMessagePanel.SetActive(false);
-		if (paymentPanel != null)
-			paymentPanel.SetActive(false);
+		//if (paymentPanel != null)
+			//paymentPanel.SetActive(false);
 
 		//玩家登录后，需要同时向PlayFab发起4个请求
 		requestNum = 4;
@@ -75,7 +75,7 @@ public class MainPanelController : PunBehaviour {
 		//获取游戏道具的信息
 		GetCatalogItemsRequest getCatalogItemsrequest = new GetCatalogItemsRequest()
 		{
-			CatalogVersion = PlayFabUserData.catalogVersion //武器道具：GunWeapon
+			CatalogVersion = PlayFabUserData.catalogVersion //武器道具：tank_v1
 		};
 		PlayFabClientAPI.GetCatalogItems(getCatalogItemsrequest, OnGetCatalogItems, OnPlayFabError);
 
@@ -98,6 +98,7 @@ public class MainPanelController : PunBehaviour {
 		PlayFabUserData.userData = result.Data;
 
 		//成就系统相关数据保存
+        /*
 		if (result.Data.ContainsKey("AchievementPoints"))
 			PlayFabUserData.achievementPoints = int.Parse(result.Data["AchievementPoints"].Value);
 		else PlayFabUserData.achievementPoints = 0;
@@ -123,6 +124,7 @@ public class MainPanelController : PunBehaviour {
 		if (result.Data.ContainsKey("ShootingDamageSkillLV"))
 			PlayFabUserData.shootingDamageSkillLV = int.Parse(result.Data["ShootingDamageSkillLV"].Value);
 		else PlayFabUserData.shootingDamageSkillLV = 0;
+        */
 
 		//玩家战斗数据保存
 		if (result.Data.ContainsKey ("TotalKill"))
@@ -155,7 +157,7 @@ public class MainPanelController : PunBehaviour {
 		if (result.Data.ContainsKey ("EquipedWeapon"))
 			PlayFabUserData.equipedWeapon = result.Data["EquipedWeapon"].Value;
 		else
-			PlayFabUserData.equipedWeapon = "AK47";
+			PlayFabUserData.equipedWeapon = "M4A3E2";
 
 		//获取玩家的仓库数据
 		GetUserInventoryRequest getUserInventoryRequest = new GetUserInventoryRequest();
@@ -171,7 +173,7 @@ public class MainPanelController : PunBehaviour {
 		}
 		//显示玩家的金币、钻石数量
 		goldCurrencyCount.text = result.VirtualCurrency ["GC"].ToString();
-		diamondCurrencyCount.text = result.VirtualCurrency["DC"].ToString();
+		//diamondCurrencyCount.text = result.VirtualCurrency["DC"].ToString();
 		//检测玩家是否拥有装备道具
 		bool hasEquipedWeapon = false;
 		foreach (ItemInstance i in result.Inventory) {
@@ -218,7 +220,7 @@ public class MainPanelController : PunBehaviour {
 	void OnGetAccountInfo(GetAccountInfoResult result)
 	{
 		//在PlayFabUserData中保存玩家邮箱信息
-		PlayFabUserData.email = result.AccountInfo.PrivateInfo.Email;
+		PlayFabUserData.username = result.AccountInfo.Username;
 		OnMessageResponse();    //PlayFab的数据是否接收完毕
 	}
 
@@ -257,9 +259,9 @@ public class MainPanelController : PunBehaviour {
 		lobbyPanel.SetActive(false);
 		shopPanel.SetActive(false);
 		inventoryPanel.SetActive(false);
-		talentPanel.SetActive(false);
+		//talentPanel.SetActive(false);
 		leaderboardPanel.SetActive(false);
-		achievementPanel.SetActive(false);
+		//achievementPanel.SetActive(false);
 		roomPanel.SetActive(false);
 		userMessagePanel.SetActive(false);
 	}
@@ -285,11 +287,13 @@ public class MainPanelController : PunBehaviour {
 		inventoryPanel.SetActive(true);
 	}
 	//“天赋”按钮的响应函数
+    /*
 	public void ClickTalentButton()
 	{
 		disableAllPanel();
 		talentPanel.SetActive(true);
 	}
+    */
 	//“排行”按钮的响应函数
 	public void ClickLeaderBoardButton()
 	{
@@ -297,11 +301,13 @@ public class MainPanelController : PunBehaviour {
 		leaderboardPanel.SetActive(true);
 	}
 	//“成就”按钮的响应函数
+    /*
 	public void ClickAchievementButton()
 	{
 		disableAllPanel();
 		achievementPanel.SetActive(true);
 	}
+    */
 	//点击左下角的玩家信息，显示玩家信息面板
 	public void ClickUserMessage()
 	{

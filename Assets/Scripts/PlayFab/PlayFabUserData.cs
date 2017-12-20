@@ -12,20 +12,22 @@ public class PlayFabUserData : MonoBehaviour {
 
     public static string playFabId = "";        //玩家账号的ID
 	public static string username ="";          //玩家账号的用户名
-    public static string email = "";            //玩家账号的绑定邮箱
+    //public static string email = "";            //玩家账号的绑定邮箱
 
     public static Dictionary<string, UserDataRecord> userData;  //PlayFab GameManager中存储的玩家自定义数据Player Data
 
-    public static int achievementPoints;        //玩家成就点数
+    //public static int achievementPoints;        //玩家成就点数
 
     public static int lv = 0;               //玩家等级
     public static int exp = 0;              //玩家经验值
 
     //玩家天赋技能等级
+    /*
     public static int expAndMoneySkillLV = 0;           //"土豪"技能
     public static int shootingRangeSkillLV = 0;         //“精通射程”技能
     public static int shootingIntervalSkillLV = 0;      //“精通射速”技能
     public static int shootingDamageSkillLV = 0;        //“精通伤害”技能
+    */
 
     //玩家的战斗数据
 	public static int totalKill = 0;            //累计杀敌数
