@@ -6,9 +6,9 @@ using PlayFab.ClientModels;
 //PlayFab相关的游戏货玩家账号数据的本地存储
 public class PlayFabUserData : MonoBehaviour {
 
-	public static string equipedWeapon="AK47";              //玩家装备的枪支
-	public static string titleId = "AD68";                  //PlayFab GameManager对应的游戏ID
-	public static string catalogVersion = "GunWeapon";      //游戏道具的目录名
+	public static string equipedWeapon="M4A3E2";              //玩家装备的枪支
+	public static string titleId = "8AF6";                  //PlayFab GameManager对应的游戏ID     AD68
+	public static string catalogVersion = "tank_v1";      //游戏道具的目录名
 
     public static string playFabId = "";        //玩家账号的ID
 	public static string username ="";          //玩家账号的用户名

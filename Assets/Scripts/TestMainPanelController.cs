@@ -8,17 +8,17 @@ using PlayFab.ClientModels;
 
 //主面板控制器
 public class TestMainPanelController : PunBehaviour {
-	public GameObject loginPanel;			//游戏登录面板
-	public GameObject mainPanel;			//游戏主面板
-	public GameObject choosePanel;
-	public GameObject lobbyPanel;           //游戏大厅面板
-	public GameObject rankPanel;     //玩家排行榜面板
-	public GameObject roomPanel;            //游戏房间面板
-	public GameObject userMessagePanel;     //玩家信息面板
-	public Text lvValue;                    //玩家简要信息 - 玩家等级
-	public Text usernameText;               //玩家简要信息 - 玩家昵称
+	public GameObject LoginPanel;			//游戏登录面板
+	public GameObject MainPanel;			//游戏主面板
+	public GameObject ChoosePanel;
+	public GameObject LobbyPanel;           //游戏大厅面板
+	public GameObject RankPanel;     //玩家排行榜面板
+	public GameObject RoomPanel;            //游戏房间面板
+	public GameObject UserMessagePanel;     //玩家信息面板
+//	public Text LvValue;                    //玩家简要信息 - 玩家等级
+//	public Text UsernameText;               //玩家简要信息 - 玩家昵称
 
-	public GameObject dataLoadingWindow;    //“数据加载中”提示窗口
+//	public GameObject DataLoadingWindow;    //“数据加载中”提示窗口
 
 
 	int requestNum = 4;
@@ -26,18 +26,18 @@ public class TestMainPanelController : PunBehaviour {
 		//显示鼠标（玩家退出战斗后，重新加载游戏场景）
 		Cursor.lockState = CursorLockMode.None;
 		Cursor.visible = true;
-		dataLoadingWindow.SetActive (true);
+//		DataLoadingWindow.SetActive (true);
 
-		if (lobbyPanel != null)
-			lobbyPanel.SetActive (false);
-		if (rankPanel != null)
-			rankPanel.SetActive(false);
-		if (roomPanel != null)
-			roomPanel.SetActive(false);
-		if (userMessagePanel != null)
-			userMessagePanel.SetActive(false);
-		if (choosePanel != null)
-			choosePanel.SetActive(false);
+		if (LobbyPanel != null)
+			LobbyPanel.SetActive (false);
+		if (RankPanel != null)
+			RankPanel.SetActive(false);
+		if (RoomPanel != null)
+			RoomPanel.SetActive(false);
+		if (UserMessagePanel != null)
+			UserMessagePanel.SetActive(false);
+		if (ChoosePanel != null)
+			ChoosePanel.SetActive(false);
 		//玩家登录后，需要同时向PlayFab发起4个请求
 		requestNum = 4;
 
@@ -72,7 +72,7 @@ public class TestMainPanelController : PunBehaviour {
 			PlayFabUserData.lv = int.Parse(result.Data["LV"].Value);
 		else
 			PlayFabUserData.lv = 1;
-		lvValue.text = PlayFabUserData.lv.ToString();
+//		LvValue.text = PlayFabUserData.lv.ToString();
 		if (result.Data.ContainsKey("Exp"))
 			PlayFabUserData.exp = int.Parse(result.Data["Exp"].Value);
 		else PlayFabUserData.exp = 0;
@@ -122,7 +122,7 @@ public class TestMainPanelController : PunBehaviour {
 		if (result.Data.ContainsKey ("EquipedWeapon"))
 			PlayFabUserData.equipedWeapon = result.Data["EquipedWeapon"].Value;
 		else
-			PlayFabUserData.equipedWeapon = "AK47";
+			PlayFabUserData.equipedWeapon = "M4A3E2";
 
 		//获取玩家的仓库数据
 		GetUserInventoryRequest getUserInventoryRequest = new GetUserInventoryRequest();
@@ -147,7 +147,7 @@ public class TestMainPanelController : PunBehaviour {
 		//如果玩家未拥有装备的道具（超出使用期限）
 		if (!hasEquipedWeapon)
 		{
-			PlayFabUserData.equipedWeapon = "AK47";
+			PlayFabUserData.equipedWeapon = "M4A3E2";
 
 			//更新玩家属性Player Data“EquipedWeapon”
 			UpdateUserDataRequest request = new UpdateUserDataRequest();
@@ -206,44 +206,44 @@ public class TestMainPanelController : PunBehaviour {
 		requestNum--;
 		if (requestNum == 0)        //PlayFab的数据已接收完毕，在游戏主面板显示游戏大厅以及其他信息
 		{
-			dataLoadingWindow.SetActive(false);
-			lobbyPanel.SetActive(true);
+//			DataLoadingWindow.SetActive(false);
+			LobbyPanel.SetActive(true);
 		}
 	}
 
 	//禁用所有面板
 	public void disableAllPanel()
 	{
-		lobbyPanel.SetActive(false);
-		rankPanel.SetActive(false);
-		roomPanel.SetActive(false);
-		userMessagePanel.SetActive(false);
-		choosePanel.SetActive (false);
+		LobbyPanel.SetActive(false);
+		RankPanel.SetActive(false);
+		RoomPanel.SetActive(false);
+		UserMessagePanel.SetActive(false);
+		ChoosePanel.SetActive (false);
 	}
 
 	public void Clickvs5Panel(){
 		
 		//set player num 5
 		disableAllPanel();
-		choosePanel.SetActive(true);
+		ChoosePanel.SetActive(true);
 	}
 
 	public void Clickvs3Panel(){
 		//set player num 3
 		disableAllPanel();
-		choosePanel.SetActive(true);
+		ChoosePanel.SetActive(true);
 	}
 
 	public void Clickvs1Panel(){
 		//set player num 1
 		disableAllPanel();
-		choosePanel.SetActive(true);
+		ChoosePanel.SetActive(true);
 	}
 
 	//点击玩家信息，显示玩家信息面板
 	public void ClickUserMessage()
 	{
 		disableAllPanel();
-		userMessagePanel.SetActive(true);
+		UserMessagePanel.SetActive(true);
 	}
 }

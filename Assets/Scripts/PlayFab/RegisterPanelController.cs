@@ -83,7 +83,7 @@ public class RegisterPanelController : MonoBehaviour {
 			CatalogVersion = PlayFabUserData.catalogVersion,
 			VirtualCurrency = "FR",
 			Price = 0,
-			ItemId = "AK47"
+			ItemId = "M4A3E2"
 		};
 		PlayFabClientAPI.PurchaseItem(request, OnPurchaseItemResult, OnPlayFabError);
 		/*
