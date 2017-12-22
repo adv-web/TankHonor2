@@ -449,6 +449,11 @@
           <e p="Test" t="Include">
             <e p="ServerIPController.cs" t="Include" />
           </e>
+          <e p="TestChooseRoomControl.cs" t="Include" />
+          <e p="TestCreateRoomPanelController.cs" t="Include" />
+          <e p="TestLobbyPanelController.cs" t="Include" />
+          <e p="TestMainPanelController.cs" t="Include" />
+          <e p="TestRoomPanelControl.cs" t="Include" />
           <e p="Zombie" t="Include">
             <e p="GuardAI.cs" t="Include" />
             <e p="GuardSensor.cs" t="Include" />
