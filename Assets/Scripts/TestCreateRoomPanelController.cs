@@ -37,18 +37,20 @@ public class TestCreateRoomPanelController : PunBehaviour {
 		//更新游戏房间的地图
 		roomNameHint.text = mapName;
 		customProperty = new ExitGames.Client.Photon.Hashtable(){
-			{"MapName", mapName}
+			{"MapName", mapName},
+			{"MaxPlayer", PlayerPrefs.GetInt("maxPlayer")}
 		};
 		roomOptions.CustomRoomProperties = customProperty;
+		roomOptions.CustomRoomPropertiesForLobby = new[] {"MapName", "MaxPlayer"};
 		RoomInfo[] roomInfos = PhotonNetwork.GetRoomList();	//获取游戏大厅内所有游戏房间
 		bool isRoomNameRepeat = false;
 		//遍历游戏房间，检查新创建的房间名是否与已有房间重复
-		foreach (RoomInfo info in roomInfos) {
+		/*foreach (RoomInfo info in roomInfos) {
 			if (roomName.text == info.name) {
 				isRoomNameRepeat = true;
 				break;
 			}
-		}
+		}*/
 		//如果房间名称重复，房间名称提示文本显示"房间名称重复！"
 		PhotonNetwork.CreateRoom (roomName.text, roomOptions, TypedLobby.Default);	//在默认游戏大厅中创建游戏房间
 		roomLoadingWindow.SetActive (true);	//启用游戏房间加载提示信息

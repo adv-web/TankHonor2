@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UI;
 using Photon;
 using PlayFab;
@@ -80,7 +82,8 @@ public class TestChooseRoomControl : PunBehaviour {
 	 * 更新游戏大厅中房间列表的显示
 	 */
 	public override void OnReceivedRoomListUpdate(){
-		roomInfo = PhotonNetwork.GetRoomList ();					//获取游戏大厅中的房间列表
+		//获取游戏大厅中的房间列表
+		roomInfo = PhotonNetwork.GetRoomList().Where(info => (int) info.customProperties["MaxPlayer"] == PlayerPrefs.GetInt("maxPlayer")).ToArray();
 		maxPageNumber = (roomInfo.Length - 1) / roomPerPage + 1;	//计算房间总页数
 		if (currentPageNumber > maxPageNumber)		//如果当前页大于房间总页数时
 			currentPageNumber = maxPageNumber;		//将当前房间页设为房间总页数

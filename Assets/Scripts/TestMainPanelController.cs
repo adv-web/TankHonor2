@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine.UI;
 using Photon;
 using PlayFab;
@@ -221,21 +222,23 @@ public class TestMainPanelController : PunBehaviour {
 		ChoosePanel.SetActive (false);
 	}
 
-	public void Clickvs5Panel(){
-		
-		//set player num 5
+	[UsedImplicitly]
+	public void Clickvs5Panel() {
+		PlayerPrefs.SetInt("maxPlayer", 10);
 		disableAllPanel();
 		ChoosePanel.SetActive(true);
 	}
 
+	[UsedImplicitly]
 	public void Clickvs3Panel(){
-		//set player num 3
+		PlayerPrefs.SetInt("maxPlayer", 6);
 		disableAllPanel();
 		ChoosePanel.SetActive(true);
 	}
 
+	[UsedImplicitly]
 	public void Clickvs1Panel(){
-		//set player num 1
+		PlayerPrefs.SetInt("maxPlayer", 2);
 		disableAllPanel();
 		ChoosePanel.SetActive(true);
 	}

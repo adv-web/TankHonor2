@@ -202,7 +202,7 @@ public class TestRoomPanelControl : PunBehaviour {
 		}
 		promptMessage.text = "";										//清空提示信息
 		PhotonNetwork.room.open = false;								//设置房间的open属性，使游戏大厅的玩家无法加入此房间
-		pView.RPC ("LoadGameScene", PhotonTargets.AllViaServer, GameInfo.mapNameMappings[mapName]);	//调用RPC，让游戏房间内所有玩家加载场景GameScene，开始游戏
+		pView.RPC ("LoadGameScene", PhotonTargets.AllViaServer, "仓库");	//调用RPC，让游戏房间内所有玩家加载场景GameScene，开始游戏
 	}
 
 	public void DeleteRoom(){
