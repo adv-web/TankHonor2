@@ -28,6 +28,13 @@ public class TestChooseRoomControl : PunBehaviour {
 	private int maxPageNumber;				//最大房间页
 	private int roomPerPage;			    //每页显示房间个数
 	private GameObject[] roomMessage;		//游戏房间信息
+	private int vsMode;
+
+	string mapName;
+	int mapIndex;
+	List<string> mapKeys;
+	List<string> mapNames;
+
 
 	void OnEnable(){
 		//获取房间信息面板
@@ -47,6 +54,9 @@ public class TestChooseRoomControl : PunBehaviour {
 
 		chooseRoomPanel.SetActive (true);
 		roomLoadingWindow.SetActive (false);		//禁用游戏房间加载提示信息
+		vsMode = PlayerPrefs.GetInt("maxPlayer");
+		vsMode = vsMode / 2;
+		title.text = vsMode+"v"+vsMode+"对战模式";
 
 		//if(PhotonNetwork.connectionStateDetailed != PeerState.JoinedLobby)
 		if (createRoomPanel != null)
@@ -60,7 +70,36 @@ public class TestChooseRoomControl : PunBehaviour {
 			chooseRoomPanel.SetActive(false);					//禁用游戏大厅面板
 		});
 
+		//地图控件
+		mapNames = new List<string>(GameInfo.maps.Keys);
+		updateDropDownItems (mapNames);
 	}
+		
+
+	void updateDropDownItems(List<string> mapNames){
+		chooseMaps.options.Clear ();
+		for (int i = 0; i < mapNames.Count; i++) {
+			Dropdown.OptionData mapdata = new Dropdown.OptionData ();
+			mapdata.text = mapNames [i].ToString();
+			chooseMaps.options.Add (mapdata);
+		}
+		chooseMaps.captionText.text = mapNames [0];
+
+	}
+
+	//toggle test
+	public void dropDownUpdate(){
+		if (chooseMaps.value == 0) {
+			//filter map to be map1
+			Debug.Log ("000");
+			OnReceivedRoomListUpdate ();
+		} else if (chooseMaps.value == 1) {
+			//filter map to be map2
+			Debug.Log ("111");
+			OnReceivedRoomListUpdate ();
+		}
+	}
+
 
 	/**覆写IPunCallback回调函数，当玩家进入游戏大厅时调用
 	 * 禁用游戏大厅加载提示
@@ -77,13 +116,14 @@ public class TestChooseRoomControl : PunBehaviour {
 		roomPanel.SetActive (true);
 	}
 
-
+	//TODO
 	/**覆写IPunCallback回调函数，当房间列表更新时调用
 	 * 更新游戏大厅中房间列表的显示
 	 */
 	public override void OnReceivedRoomListUpdate(){
 		//获取游戏大厅中的房间列表
-		roomInfo = PhotonNetwork.GetRoomList().Where(info => (int) info.customProperties["MaxPlayer"] == PlayerPrefs.GetInt("maxPlayer")).ToArray();
+		//filter with mapno.
+		roomInfo = PhotonNetwork.GetRoomList().Where(info => ((int) info.customProperties["MaxPlayer"] == PlayerPrefs.GetInt("maxPlayer") && (int) info.customProperties["MapNo"] == (int)chooseMaps.value)).ToArray();
 		maxPageNumber = (roomInfo.Length - 1) / roomPerPage + 1;	//计算房间总页数
 		if (currentPageNumber > maxPageNumber)		//如果当前页大于房间总页数时
 			currentPageNumber = maxPageNumber;		//将当前房间页设为房间总页数
@@ -154,15 +194,19 @@ public class TestChooseRoomControl : PunBehaviour {
 
 	//"上一页"按钮事件处理函数
 	public void ClickPreviousButton(){
-		currentPageNumber--;		//当前房间页减一
-		pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		if(currentPageNumber>1){
+			currentPageNumber--;		//当前房间页减一
+			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		}
 		ButtonControl ();			//当前房间页更新，调动翻页控制函数
 		ShowRoomMessage ();			//当前房间页更新，重新显示房间信息
 	}
 	//"下一页"按钮事件处理函数
 	public void ClickNextButton(){
-		currentPageNumber++;		//当前房间页加一
-		pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		if(currentPageNumber < maxPageNumber){
+			currentPageNumber++;		//当前房间页加一
+			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		}
 		ButtonControl ();			//当前房间页更新，调动翻页控制函数
 		ShowRoomMessage ();			//当前房间页更新，重新显示房间信息
 	}

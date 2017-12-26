@@ -16,11 +16,12 @@ public class TestRoomPanelControl : PunBehaviour {
 	public GameObject[] DefenderTeam;	//队伍2面板（显示队伍2信息）
 	public Button startButton;			//准备/开始游戏按钮
 	public GameObject LoadingPanel;     //加载游戏提示
-	public Image[] tanks;
 	public Image myImage;
 	public Text myID;
 	public Text promptMessage;
 	public Button deleteRoom;
+	public Image redTank;
+	public Image blueTank;
 
 	string mapName;
 	int mapIndex;
@@ -87,7 +88,7 @@ public class TestRoomPanelControl : PunBehaviour {
 		//显示游戏房间的地图
 		mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
 		map.text = mapName;
-		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+		//photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
 		mapKeys = new List<string>(GameInfo.maps.Keys);
 		int length = mapKeys.Count;
 		for(int i = 0; i < length; i++)
@@ -98,7 +99,20 @@ public class TestRoomPanelControl : PunBehaviour {
 				break;
 			}
 		}
+
+		getRandomTanker ();
 			
+	}
+
+	//TODO
+	public void getRandomTanker(){
+		string path = "Temp/tank1";
+		string path2 = "Temp/tank2";
+		Sprite sp1 = Resources.Load<Sprite> (path);
+		Debug.Log (sp1);
+		redTank.sprite = sp1;
+		Sprite sp2 = Resources.Load<Sprite> (path2);
+		blueTank.sprite = sp2;
 	}
 
 	/**覆写IPunCallback回调函数，当玩家属性更改时调用
