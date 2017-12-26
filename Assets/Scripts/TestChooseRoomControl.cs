@@ -31,10 +31,10 @@ public class TestChooseRoomControl : PunBehaviour {
 	private int playerNum;
 	private int vsMode;
 
-
 	string mapName;
 	int mapIndex;
 	List<string> mapKeys;
+	List<string> mapNames;
 	ExitGames.Client.Photon.Hashtable customRoomProperties;
 
 	void OnEnable(){
@@ -55,9 +55,10 @@ public class TestChooseRoomControl : PunBehaviour {
 
 		chooseRoomPanel.SetActive (true);
 		roomLoadingWindow.SetActive (false);		//禁用游戏房间加载提示信息
-		playerNum = PlayerPrefs.GetInt("maxPlayer");
-		int halfNum = (int)(playerNum / 2);
-		title.text = halfNum.ToString () + "V"+halfNum.ToString ()+"对战模式";	//更新房间页数信息的显示
+		vsMode = PlayerPrefs.GetInt("maxPlayer");
+		vsMode = vsMode / 2;
+		title.text = vsMode+"v"+vsMode+"对战模式";
+
 		//if(PhotonNetwork.connectionStateDetailed != PeerState.JoinedLobby)
 		if (createRoomPanel != null)
 			createRoomPanel.SetActive (false);  //禁用创建房间面板
@@ -70,27 +71,11 @@ public class TestChooseRoomControl : PunBehaviour {
 			chooseRoomPanel.SetActive(false);					//禁用游戏大厅面板
 		});
 
-		//复选框
-
 		//地图控件
 		mapNames = new List<string>(GameInfo.maps.Keys);
 		updateDropDownItems (mapNames);
-		//显示游戏房间的地图
-		mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
-		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
-		mapKeys = new List<string>(GameInfo.maps.Keys);
-		int length = mapKeys.Count;
-		for(int i = 0; i < length; i++)
-		{
-			if(mapKeys[i] == mapName)
-			{
-				mapIndex = i;
-				break;
-			}
-		}
-
 	}
-
+		
 
 	void updateDropDownItems(List<string> mapNames){
 		chooseMaps.options.Clear ();
@@ -138,7 +123,8 @@ public class TestChooseRoomControl : PunBehaviour {
 	 */
 	public override void OnReceivedRoomListUpdate(){
 		//获取游戏大厅中的房间列表
-		roomInfo = PhotonNetwork.GetRoomList().Where(info => (int) info.customProperties["MaxPlayer"] == PlayerPrefs.GetInt("maxPlayer")).ToArray();
+		//filter with mapno.
+		roomInfo = PhotonNetwork.GetRoomList().Where(info => ((int) info.customProperties["MaxPlayer"] == PlayerPrefs.GetInt("maxPlayer") && (int) info.customProperties["MapNo"] == (int)chooseMaps.value)).ToArray();
 		maxPageNumber = (roomInfo.Length - 1) / roomPerPage + 1;	//计算房间总页数
 		if (currentPageNumber > maxPageNumber)		//如果当前页大于房间总页数时
 			currentPageNumber = maxPageNumber;		//将当前房间页设为房间总页数
