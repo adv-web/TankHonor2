@@ -17,10 +17,12 @@ public class TestCreateRoomPanelController : PunBehaviour {
 	public Image mapImage; 
 	public GameObject mapButtons;
 
+
 	string mapName;
 	int mapIndex;
 	List<string> mapKeys;
 	private ExitGames.Client.Photon.Hashtable customProperty;
+	private int playerNum;
 
 
 	void OnEnable () {
