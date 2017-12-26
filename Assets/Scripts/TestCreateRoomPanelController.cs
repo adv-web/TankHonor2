@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using Photon;
 
 public class TestCreateRoomPanelController : PunBehaviour {
+
 	public GameObject createRoomPanel;
+	public GameObject roomLoadingWindow;		//禁用游戏房间加载提示信息房 间 进 入 中 ...
 	public GameObject chooseRoomPanel;
 	public GameObject roomPanel;
-	public GameObject roomLoadingWindow;		//禁用游戏房间加载提示信息房 间 进 入 中 ...
 	public Button backButton;
 	public Text roomName;					//房间名称文本
 	public Text roomNameHint;				//房间名称提示文本
@@ -24,28 +25,15 @@ public class TestCreateRoomPanelController : PunBehaviour {
 	private ExitGames.Client.Photon.Hashtable customProperty;
 	private int playerNum;
 
-	private Dictionary<string,Sprite> mapSprites;
+//	private Dictionary<string,Sprite> mapSprites;
 
-	//TODO
 	void OnEnable () {
 		roomNameHint.text = "";	//清空房间名称提示文本
 		mapKeys = new List<string>(GameInfo.maps.Keys);
 		mapIndex = 0;
 		mapName = mapKeys[mapIndex];
-		//mapImage.sprite = GameInfo.maps[mapName];
-		addSprites();
-		mapImage.sprite = mapSprites[mapName];
 	}
 
-	void addSprites(){
-		mapSprites = new Dictionary<string,Sprite> ();
-		string path = "Temp/map1";
-		string path2 = "Temp/map2";
-		Sprite sp1 = Resources.Load<Sprite> (path);
-		Sprite sp2 = Resources.Load<Sprite> (path2);
-		mapSprites[mapKeys[0]] = sp1;
-		mapSprites[mapKeys[1]] = sp2;
-	}
 
 	public void startButtonClick(){
 		RoomOptions roomOptions=new RoomOptions();
@@ -79,16 +67,16 @@ public class TestCreateRoomPanelController : PunBehaviour {
 	}
 
 	//RPC函数，更新游戏房间地图的显示
-	[PunRPC]
-	public void UpdateMap(string name){
-		//mapImage.sprite = GameInfo.maps[name];
-		mapImage.sprite = mapSprites[name];
-	}
+//	[PunRPC]
+//	public void UpdateMap(string name){
+//		//mapImage.sprite = GameInfo.maps[name];
+//		mapImage.sprite = mapSprites[name];
+//	}
 
 	//显示或关闭地图切换按钮
-	void MapButtonsControl(){
-		mapButtons.SetActive (true);
-	}
+//	void MapButtonsControl(){
+//		mapButtons.SetActive (true);
+//	}
 	///上一张地图
 	public void ClickMapLeftButton()
 	{
@@ -96,7 +84,7 @@ public class TestCreateRoomPanelController : PunBehaviour {
 		mapIndex--;
 		if (mapIndex < 0) mapIndex = length - 1;
 		mapName = mapKeys[mapIndex];
-		mapImage.sprite = mapSprites[mapName];
+		mapImage.sprite = GameInfo.maps[mapName];
 	}
 	//下一张地图
 	public void ClickMapRightButton()
@@ -105,7 +93,7 @@ public class TestCreateRoomPanelController : PunBehaviour {
 		mapIndex++;
 		if (mapIndex >= length) mapIndex = 0;
 		mapName = mapKeys[mapIndex];
-		mapImage.sprite = mapSprites[mapName];
+		mapImage.sprite = GameInfo.maps[mapName];
 	}
 
 }
