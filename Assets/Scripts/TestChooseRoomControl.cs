@@ -28,6 +28,13 @@ public class TestChooseRoomControl : PunBehaviour {
 	private int maxPageNumber;				//最大房间页
 	private int roomPerPage;			    //每页显示房间个数
 	private GameObject[] roomMessage;		//游戏房间信息
+	private int playerNum;
+
+
+	string mapName;
+	int mapIndex;
+	List<string> mapKeys;
+	ExitGames.Client.Photon.Hashtable customRoomProperties;
 
 	void OnEnable(){
 		//获取房间信息面板
@@ -47,7 +54,9 @@ public class TestChooseRoomControl : PunBehaviour {
 
 		chooseRoomPanel.SetActive (true);
 		roomLoadingWindow.SetActive (false);		//禁用游戏房间加载提示信息
-
+		playerNum = PlayerPrefs.GetInt("maxPlayer");
+		int halfNum = (int)(playerNum / 2);
+		title.text = halfNum.ToString () + "V"+halfNum.ToString ()+"对战模式";	//更新房间页数信息的显示
 		//if(PhotonNetwork.connectionStateDetailed != PeerState.JoinedLobby)
 		if (createRoomPanel != null)
 			createRoomPanel.SetActive (false);  //禁用创建房间面板
@@ -59,6 +68,22 @@ public class TestChooseRoomControl : PunBehaviour {
 			lobbyPanel.SetActive(true);//启用游戏登录面板
 			chooseRoomPanel.SetActive(false);					//禁用游戏大厅面板
 		});
+			
+		//复选框
+
+		//显示游戏房间的地图
+		mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+		mapKeys = new List<string>(GameInfo.maps.Keys);
+		int length = mapKeys.Count;
+		for(int i = 0; i < length; i++)
+		{
+			if(mapKeys[i] == mapName)
+			{
+				mapIndex = i;
+				break;
+			}
+		}
 
 	}
 
@@ -154,15 +179,19 @@ public class TestChooseRoomControl : PunBehaviour {
 
 	//"上一页"按钮事件处理函数
 	public void ClickPreviousButton(){
-		currentPageNumber--;		//当前房间页减一
-		pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		if(currentPageNumber !=1){
+			currentPageNumber--;		//当前房间页减一
+			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		}
 		ButtonControl ();			//当前房间页更新，调动翻页控制函数
 		ShowRoomMessage ();			//当前房间页更新，重新显示房间信息
 	}
 	//"下一页"按钮事件处理函数
 	public void ClickNextButton(){
-		currentPageNumber++;		//当前房间页加一
-		pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		if(currentPageNumber!=maxPageNumber){
+			currentPageNumber++;		//当前房间页加一
+			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
+		}
 		ButtonControl ();			//当前房间页更新，调动翻页控制函数
 		ShowRoomMessage ();			//当前房间页更新，重新显示房间信息
 	}
@@ -170,5 +199,28 @@ public class TestChooseRoomControl : PunBehaviour {
 	//"进入房间"按钮事件处理函数
 	public void ClickJoinRoomButton(string roomName){
 		PhotonNetwork.JoinRoom(roomName);	//根据房间名加入游戏房间
+	}
+
+	//上一张地图
+	public void ClickMapLeftButton()
+	{
+		int length = mapKeys.Count;
+		mapIndex--;
+		if (mapIndex < 0) mapIndex = length - 1;
+		mapName = mapKeys[mapIndex];
+		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
+		PhotonNetwork.room.SetCustomProperties(customProperties);
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
+	}
+	//下一张地图
+	public void ClickMapRightButton()
+	{
+		int length = mapKeys.Count;
+		mapIndex++;
+		if (mapIndex >= length) mapIndex = 0;
+		mapName = mapKeys[mapIndex];
+		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
+		PhotonNetwork.room.SetCustomProperties(customRoomProperties);
+		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
 	}
 }
