@@ -22,4 +22,5 @@
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 .idea/
+# Photon ip
 Assets/Photon Unity Networking/Resources/
