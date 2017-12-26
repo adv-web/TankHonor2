@@ -29,6 +29,7 @@ public class TestChooseRoomControl : PunBehaviour {
 	private int roomPerPage;			    //每页显示房间个数
 	private GameObject[] roomMessage;		//游戏房间信息
 	private int playerNum;
+	private int vsMode;
 
 
 	string mapName;
@@ -68,9 +69,12 @@ public class TestChooseRoomControl : PunBehaviour {
 			lobbyPanel.SetActive(true);//启用游戏登录面板
 			chooseRoomPanel.SetActive(false);					//禁用游戏大厅面板
 		});
-			
+
 		//复选框
 
+		//地图控件
+		mapNames = new List<string>(GameInfo.maps.Keys);
+		updateDropDownItems (mapNames);
 		//显示游戏房间的地图
 		mapName = PhotonNetwork.room.customProperties["MapName"].ToString();
 		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
@@ -86,6 +90,32 @@ public class TestChooseRoomControl : PunBehaviour {
 		}
 
 	}
+
+
+	void updateDropDownItems(List<string> mapNames){
+		chooseMaps.options.Clear ();
+		for (int i = 0; i < mapNames.Count; i++) {
+			Dropdown.OptionData mapdata = new Dropdown.OptionData ();
+			mapdata.text = mapNames [i].ToString();
+			chooseMaps.options.Add (mapdata);
+		}
+		chooseMaps.captionText.text = mapNames [0];
+
+	}
+
+	//toggle test
+	public void dropDownUpdate(){
+		if (chooseMaps.value == 0) {
+			//filter map to be map1
+			Debug.Log ("000");
+			OnReceivedRoomListUpdate ();
+		} else if (chooseMaps.value == 1) {
+			//filter map to be map2
+			Debug.Log ("111");
+			OnReceivedRoomListUpdate ();
+		}
+	}
+
 
 	/**覆写IPunCallback回调函数，当玩家进入游戏大厅时调用
 	 * 禁用游戏大厅加载提示
@@ -179,7 +209,7 @@ public class TestChooseRoomControl : PunBehaviour {
 
 	//"上一页"按钮事件处理函数
 	public void ClickPreviousButton(){
-		if(currentPageNumber !=1){
+		if(currentPageNumber>1){
 			currentPageNumber--;		//当前房间页减一
 			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
 		}
@@ -188,7 +218,7 @@ public class TestChooseRoomControl : PunBehaviour {
 	}
 	//"下一页"按钮事件处理函数
 	public void ClickNextButton(){
-		if(currentPageNumber!=maxPageNumber){
+		if(currentPageNumber < maxPageNumber){
 			currentPageNumber++;		//当前房间页加一
 			pageMessage.text = currentPageNumber.ToString () + "/" + maxPageNumber.ToString ();	//更新房间页数显示
 		}
@@ -199,28 +229,5 @@ public class TestChooseRoomControl : PunBehaviour {
 	//"进入房间"按钮事件处理函数
 	public void ClickJoinRoomButton(string roomName){
 		PhotonNetwork.JoinRoom(roomName);	//根据房间名加入游戏房间
-	}
-
-	//上一张地图
-	public void ClickMapLeftButton()
-	{
-		int length = mapKeys.Count;
-		mapIndex--;
-		if (mapIndex < 0) mapIndex = length - 1;
-		mapName = mapKeys[mapIndex];
-		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
-		PhotonNetwork.room.SetCustomProperties(customProperties);
-		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
-	}
-	//下一张地图
-	public void ClickMapRightButton()
-	{
-		int length = mapKeys.Count;
-		mapIndex++;
-		if (mapIndex >= length) mapIndex = 0;
-		mapName = mapKeys[mapIndex];
-		customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "MapName", mapName } };
-		PhotonNetwork.room.SetCustomProperties(customRoomProperties);
-		photonView.RPC("UpdateMap", PhotonTargets.All, mapName);
 	}
 }
